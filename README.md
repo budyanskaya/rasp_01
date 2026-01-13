@@ -23,6 +23,7 @@ pip install grpcio grpcio-tools
 python3 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. product_service.proto
 ```
 После выполнения этой команды у нас появятся файлы:
+
 <img width="168" height="167" alt="image" src="https://github.com/user-attachments/assets/a9f8e282-8eb3-4f6b-862f-46ea301035c2" />
 
 ### Запуск сервера
