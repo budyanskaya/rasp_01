@@ -10,6 +10,7 @@
 ### Формат сдачи: product_service.proto, server.py, client.py
 ## Ход работы
 ### Сначала создаем все нужные для работы файлы: product_service.proto, server.py, client.py
+<img width="182" height="131" alt="image" src="https://github.com/user-attachments/assets/c217e646-a272-4193-9899-674f1cb537e6" />
 
 ### Далее устанавливаем зависимости
 ```
