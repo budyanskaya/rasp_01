@@ -1,0 +1,29 @@
+syntax = "proto3";
+package productcatalog;
+option java_package = "com.example.productcatalog";
+option java_multiple_files = true;
+service ProductCatalogService {
+  rpc GetProduct (GetProductRequest) returns (Product) {}
+  rpc StreamProducts (StreamProductsRequest) returns (stream Product) {}
+}
+message GetProductRequest {
+  string product_id = 1;
+}
+message StreamProductsRequest {
+  bool include_inactive = 1;
+}
+message Product {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  string category = 5;
+  int32 stock_quantity = 6;
+  bool is_active = 7;
+  repeated string tags = 8;
+}
+message ErrorResponse {
+  string error_code = 1;
+  string message = 2;
+  int32 status_code = 3;
+}
