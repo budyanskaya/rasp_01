@@ -16,43 +16,43 @@ class InMemoryProductDB:
         self.products: Dict[str, pb2.Product] = {
             "1": pb2.Product(
                 id="1",
-                name="Кофемашина Barista Elite",
-                description="Автоматическая кофемашина с функцией капучино и латте",
-                price=450.00,
-                category="Бытовая техника",
-                stock_quantity=15,
+                name="Планшет UltraTab 9",
+                description="Лёгкий планшет с 9-дюймовым дисплеем и 8 часов работы от батареи",
+                price=349.99,
+                category="Электроника",
+                stock_quantity=75,
                 is_active=True,
-                tags=["кофе", "кухня", "премиум"]
+                tags=["планшет", "android", "ультратонкий"]
             ),
             "2": pb2.Product(
                 id="2",
-                name="Механическая клавиатура RGB Pro",
-                description="Клавиатура с переключателями Cherry MX Blue и подсветкой",
-                price=120.50,
-                category="Компьютерные аксессуары",
-                stock_quantity=40,
+                name="Механическая клавиатура RGB",
+                description="Клавиатура с подсветкой и тактильными переключателями для геймеров",
+                price=89.99,
+                category="Аксессуары",
+                stock_quantity=120,
                 is_active=True,
-                tags=["клавиатура", "гейминг", "rgb"]
+                tags=["клавиатура", "gaming", "rgb"]
             ),
             "3": pb2.Product(
                 id="3",
-                name="Спортивная бутылка для воды 1L",
-                description="Термостойкая бутылка из нержавеющей стали с фильтром",
-                price=29.99,
-                category="Спорт и отдых",
-                stock_quantity=200,
+                name="Смарт-часы HealthTrack Pro",
+                description="Часы с пульсометром, шагомером и уведомлениями",
+                price=159.99,
+                category="Гаджеты",
+                stock_quantity=60,
                 is_active=True,
-                tags=["бутылка", "спорт", "экология"]
+                tags=["часы", "здоровье", "спорт"]
             ),
             "4": pb2.Product(
                 id="4",
-                name="USB-флешка 8 ГБ (снята с производства)",
-                description="Устаревшая модель флеш-накопителя без поддержки USB 3.0",
-                price=8.99,
+                name="Снятая с производства мышь",
+                description="Старая модель оптической мыши без поддержки",
+                price=12.50,
                 category="Архив",
                 stock_quantity=0,
                 is_active=False,  # Неактивный товар
-                tags=["устаревшее", "usb", "архив"]
+                tags=["мышь", "устаревшее"]
             )
         }
     
