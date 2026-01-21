@@ -12,14 +12,33 @@
 ## 1. Сначала создаем все нужные для работы файлы: product_service.proto, server.py, client.py
 <img width="182" height="131" alt="image" src="https://github.com/user-attachments/assets/c217e646-a272-4193-9899-674f1cb537e6" />
 
-## 2. Устанавливаем зависимости
+## 2. Обновляем пакеты и устанавливаем Python
+```
+sudo apt update
+```
+```
+sudo apt install python3 python3-pip python3-venv -y
+```
+
+## 3. Создаём и активируем виртуальное окружение, в котором будем работать
+```
+cd rasp1
+```
+```
+python3 -m venv venv
+```
+```
+source venv/bin/activate
+```
+
+## 4. Устанавливаем зависимости
 > Устанавливаем библиотеки, необходимые для разработки gRPC-сервиса, они позволяют генерировать код из .proto-файла и реализовать сервер с клиентом.
 ```
 pip install grpcio grpcio-tools
 ```
 <img width="461" height="287" alt="image" src="https://github.com/user-attachments/assets/a01f503e-f96f-453d-9822-9817f62b30c3" />
 
-## 3. Генерируем Python кода из proto-файла
+## 5. Генерируем Python кода из proto-файла
 > Генерируем Python-код из файла `product_service.proto`
 ```
 python3 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. product_service.proto
@@ -28,7 +47,7 @@ python3 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. product_serv
 
 <img width="168" height="167" alt="image" src="https://github.com/user-attachments/assets/a9f8e282-8eb3-4f6b-862f-46ea301035c2" />
 
-## 4. Запуск сервера
+## 6. Запуск сервера
 > Запускаем gRPC-сервер, реализующий сервис «ProductCatalog» с методами `GetProduct` и `StreamProducts`.
 ```
 python3 server.py
