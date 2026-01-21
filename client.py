@@ -1,4 +1,3 @@
-client.py 
 import grpc
 import time
 import logging
@@ -183,4 +182,5 @@ def run_interactive():
 
 if __name__ == '__main__':
     run_interactive()
+
 
