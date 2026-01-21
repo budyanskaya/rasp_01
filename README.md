@@ -9,10 +9,12 @@
 * Обработку ошибок (запрос несуществующего товара)
 ### Формат сдачи: product_service.proto, server.py, client.py
 ## Ход работы
-## 1. Сначала создаем все нужные для работы файлы: product_service.proto, server.py, client.py
-<img width="182" height="131" alt="image" src="https://github.com/user-attachments/assets/c217e646-a272-4193-9899-674f1cb537e6" />
+## 1. Создаем все нужные для работы файлы: product_service.proto, server.py, client.py
+> Сначала мы определяем контракт взаимодействия в .proto-файле, а потом уже на его основании пишем реализацию сервера и клиента 
+<img width="182" height="191" alt="image" src="https://github.com/user-attachments/assets/454a27c7-048e-4fb2-a816-a0bfdf20e319" />
 
 ## 2. Обновляем пакеты и устанавливаем Python
+> Обновляю список пакетов и устанавливаю Python3 с необходимыми компонентами для дальнейшей работы
 ```
 sudo apt update
 ```
@@ -21,6 +23,7 @@ sudo apt install python3 python3-pip python3-venv -y
 ```
 
 ## 3. Создаём и активируем виртуальное окружение, в котором будем работать
+> Перехожу в  заранее созданную рабочую папку rasp1, создаю виртуальное окружение venv и активирую его 
 ```
 cd rasp1
 ```
@@ -30,13 +33,14 @@ python3 -m venv venv
 ```
 source venv/bin/activate
 ```
+<img width="433" height="62" alt="image" src="https://github.com/user-attachments/assets/9ae49b9e-5aa1-46ff-a41c-297649a9de0d" />
 
 ## 4. Устанавливаем зависимости
 > Устанавливаем библиотеки, необходимые для разработки gRPC-сервиса, они позволяют генерировать код из .proto-файла и реализовать сервер с клиентом.
 ```
 pip install grpcio grpcio-tools
 ```
-<img width="461" height="287" alt="image" src="https://github.com/user-attachments/assets/a01f503e-f96f-453d-9822-9817f62b30c3" />
+<img width="897" height="192" alt="image" src="https://github.com/user-attachments/assets/5332356f-76e6-491e-9829-a93554c25e1c" />
 
 ## 5. Генерируем Python кода из proto-файла
 > Генерируем Python-код из файла `product_service.proto`
@@ -44,27 +48,49 @@ pip install grpcio grpcio-tools
 python3 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. product_service.proto
 ```
 > После выполнения этой команды у нас появятся файлы:
-
-<img width="168" height="167" alt="image" src="https://github.com/user-attachments/assets/a9f8e282-8eb3-4f6b-862f-46ea301035c2" />
+<img width="185" height="201" alt="image" src="https://github.com/user-attachments/assets/9341fa97-daa9-469b-8d07-693198d28407" />
 
 ## 6. Запуск сервера
 > Запускаем gRPC-сервер, реализующий сервис «ProductCatalog» с методами `GetProduct` и `StreamProducts`.
 ```
 python3 server.py
 ```
-<img width="520" height="387" alt="image" src="https://github.com/user-attachments/assets/9417f51b-4604-4ed1-8923-2a2c782491fb" />
+<img width="570" height="181" alt="image" src="https://github.com/user-attachments/assets/cf2e5ff8-7e4b-4d67-983e-3431b41f77ad" />
 
 ## 5. Запуск клиента
 > Запускает клиент gRPC-сервиса, который тестирует оба метода — `GetProduct` и `StreamProducts`.
 ```
 python3 client.py
 ```
-<img width="513" height="370" alt="image" src="https://github.com/user-attachments/assets/31789f2c-0970-418c-8763-d451f19bb1f5" />
+<img width="686" height="683" alt="image" src="https://github.com/user-attachments/assets/2adb0485-c4dc-42a3-8930-dc761c0dc19c" />
 
 ## Анализ
-Анализ показал, что Unary RPC выполняется очень быстро (~0.001 с), тогда как Streaming RPC искусственно замедлен (time.sleep(0.5) между отправками) для демонстрации потоковой передачи — 4 товара получены за ~2.23 с. Это наглядно иллюстрирует разницу в моделях взаимодействия: Unary эффективен для единичных запросов, Streaming — для постепенной передачи множества элементов.
-Обработка ошибок реализована корректно: при запросе несуществующего товара сервер возвращает статус NOT_FOUND, который клиент распознаёт и информативно отображает.
-Работа подтверждает корректность применения gRPC для построения высокопроизводительных и типобезопасных сервисов.
+> В системе реализован пункт для автоматического анализа времени выполнения каждого типа RPC
+<img width="753" height="893" alt="Снимок экрана 2026-01-21 035031" src="https://github.com/user-attachments/assets/dbe6beba-6c8b-455f-a353-8ff1402a70d9" />
+<img width="590" height="585" alt="Снимок экрана 2026-01-21 035104" src="https://github.com/user-attachments/assets/38b14f62-e94f-40e3-bcf3-59c251078354" />
+
+>**Unary RPC (GetProduct):**
+> Время выполнения отдельных вызовов:
+> * ID=1: 0.0019 с
+> * ID=2: 0.0013 с
+> * ID=3: 0.0012 с
+> * ID=4: 0.0008 с
+> Среднее время для первых трёх (активных) товаров: 0.0018 с
+> Последовательный вызов для 3 товаров: ~0.0054 с
+>
+> **Server Streaming RPC (StreamProducts):**
+> Общее время получения 3 активных товаров: 1.7095 с
+> Средняя скорость: 1.76 товара/сек
+>
+> **Анализ времени выполнения каждого типа RPC**
+> Unary RPC работает значительно быстрее, так как это простой запрос–ответ без задержек.
+> Streaming RPC искусственно замедлен из-за time.sleep(0.5) в сервере (по 0.5 секунды на товар → 3 × 0.5 = 1.5 с минимум), это объясняет высокое общее время.
+> Streaming здесь не оптимизирован для скорости, а демонстрирует асинхронную потоковую передачу, а не массовое получение.
+>
+>**Анализ обработки ошибок (запрос несуществующего товара)**
+> Система корректно обрабатывает запросы несуществующих товаров, при любом неизвестном `product_id` клиет показывает gRPC-статус `NOT_FOUND` с  сообщением «Товар с ID … не найден», а клиент отображает ошибку, код, детали и выдает рекомендацию — «Проверьте правильность ID товара». 
+<img width="1457" height="242" alt="image" src="https://github.com/user-attachments/assets/b0f27a33-9ada-44e9-a8a0-c5cb26bc149f" />
+
 
 # Вывод
-В ходе работы был создан proto-контракт с Unary и Server Streaming RPC, реализованы сервер с in-memory базой и клиент, проведён анализ времени выполнения и обработки ошибок. Показано, что gRPC обеспечивает типобезопасное, эффективное взаимодействие, а различия между типами вызовов, были наглядно продемонстрированы. 
+В ходе работы реализован gRPC-сервис ProductCatalog с методами GetProduct (Unary) и StreamProducts (Server Streaming). Unary RPC работает быстро, Streaming  медленнее из-за искусственной задержки в коде, что соответствует цели демонстрации потоковой передачи. Ошибки при запросе несуществующих товаров обрабатываются корректно, клиент получает статус NOT_FOUND и понятное сообщение. 
